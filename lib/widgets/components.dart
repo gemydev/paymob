@@ -4,7 +4,7 @@ Widget defaultButton({
   double width = double.infinity,
   Color background = Colors.cyan,
   bool isUpperCase = true,
-  double radius = 0.0,
+  double radius = 20.0,
   required Function() function,
   required String text,
 }) =>
@@ -15,7 +15,7 @@ Widget defaultButton({
         onPressed: function,
         child: Text(
           isUpperCase ? text.toUpperCase() : text,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white , fontSize: 20),
         ),
       ),
       decoration: BoxDecoration(
@@ -77,7 +77,7 @@ Widget defaultFormField({
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25.0),
           borderSide: const BorderSide(
-            color: Colors.redAccent,
+            color: Colors.cyan,
           ),
         ),
         border: OutlineInputBorder(

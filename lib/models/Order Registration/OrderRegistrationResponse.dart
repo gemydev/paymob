@@ -1,3 +1,5 @@
+import 'package:paymob/models/Order%20Registration/OredrRegistrationRequest.dart';
+
 /// id : 103
 /// created_at : "2017-01-10T05:41:15.700814Z"
 /// delivery_needed : "false"
@@ -58,7 +60,7 @@ class OrderRegistrationResponse {
     if (json['items'] != null) {
       _items = [];
       json['items'].forEach((v) {
-        _items?.add(Dynamic.fromJson(v));
+        _items?.add(Items.fromJson(json));
       });
     }
   }
