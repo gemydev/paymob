@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:paymob/screens/register_screen.dart';
 
-import 'screens/home_screen.dart';
+import 'network/dio_helper.dart';
+import 'screens/register_screen.dart';
+
 
 void main() async{
   await DioHelper.init();
@@ -14,11 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'PayMob',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.cyan,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const RegisterScreen(),
     );
   }
 }

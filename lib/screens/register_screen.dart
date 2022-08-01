@@ -1,55 +1,112 @@
-import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
-class DioHelper {
-  static late Dio dio;
+import '../widgets/components.dart';
 
-  static init() {
-    dio = Dio(
-      BaseOptions(
-        baseUrl: 'https://accept.paymob.com/api/',
-        receiveDataWhenStatusError: true,
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailNameController = TextEditingController();
+  final TextEditingController _phoneNameController = TextEditingController();
+  final TextEditingController _priceNameController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        title: const Text("Register Screen",
+            style: TextStyle(color: Colors.white)),
+        centerTitle: true,
+        backgroundColor: Colors.cyan,
+      ),
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 25),
+                defaultFormField(
+                  controller: _firstNameController,
+                  label: "First Name",
+                  validate: (String? value) {
+                    if (value!.isEmpty) {
+                      return "Enter Your First Name";
+                    }
+                    return null;
+                  },
+                  type: TextInputType.name,
+                  prefix: Icons.person,
+                ),
+                const SizedBox(height: 15),
+                defaultFormField(
+                  controller: _lastNameController,
+                  label: "Last Name",
+                  validate: (String? value) {
+                    if (value!.isEmpty) {
+                      return "Enter Your Last Name";
+                    }
+                    return null;
+                  },
+                  type: TextInputType.name,
+                  prefix: Icons.person,
+                ),
+                const SizedBox(height: 15),
+                defaultFormField(
+                  controller: _emailNameController,
+                  label: "Email",
+                  validate: (String? value) {
+                    if (value!.isEmpty) {
+                      return "Enter Your Email";
+                    }
+                    return null;
+                  },
+                  type: TextInputType.emailAddress,
+                  prefix: Icons.email,
+                ),
+                const SizedBox(height: 15),
+                defaultFormField(
+                  controller: _phoneNameController,
+                  label: "Phone",
+                  validate: (String? value) {
+                    if (value!.isEmpty) {
+                      return "Enter Your Phone";
+                    }
+                    return null;
+                  },
+                  type: TextInputType.phone,
+                  prefix: Icons.phone,
+                ),
+                const SizedBox(height: 15),
+                defaultFormField(
+                  controller: _priceNameController,
+                  label: "Price",
+                  validate: (String? value) {
+                    if (value!.isEmpty) {
+                      return "Enter The Price";
+                    }
+                    return null;
+                  },
+                  type: TextInputType.number,
+                  prefix: Icons.price_check,
+                ),
+                const SizedBox(height: 20),
+                defaultButton(text: 'Pay', function: () {})
+              ],
+            ),
+          ),
+        ),
       ),
     );
-  }
-
-  static Future<Response> getData({
-    required String url,
-    Map<String, dynamic>? query,
-    String? auth,
-  }) async {
-    dio.options.headers = {
-      'Content-Type': 'application/json',
-      'Authorization': auth,
-    };
-    return await dio.get(
-      url,
-      queryParameters: query,
-    );
-  }
-
-  static Future<Response> updateData({
-    required String url,
-    Map<String, dynamic>? query,
-  }) async {
-    return await dio.put(
-      url,
-      queryParameters: query,
-    );
-  }
-
-  static Future<Response> postData({
-    required String url,
-    required Map<String, dynamic> data,
-    Map<String, dynamic>? query,
-    String lang = 'en',
-    String? auth,
-  }) async {
-    dio.options.headers = {
-      'Content-Type': 'application/json',
-      'lang': lang,
-      'Authorization': auth,
-      'Accept': 'application/json'
-    };
-    return dio.post(url, queryParameters: query, data: data);
   }
 }
