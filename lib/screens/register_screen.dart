@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paymob/BL/Cubit/payment_cubit.dart';
+import 'package:paymob/screens/toggle_screen.dart';
 
 import '../widgets/components.dart';
 
@@ -16,9 +17,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _emailNameController = TextEditingController();
-  final TextEditingController _phoneNameController = TextEditingController();
-  final TextEditingController _priceNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         const SizedBox(height: 15),
                         defaultFormField(
-                          controller: _emailNameController,
+                          controller: _emailController,
                           label: "Email",
                           validate: (String? value) {
                             if (value!.isEmpty) {
@@ -83,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         const SizedBox(height: 15),
                         defaultFormField(
-                          controller: _phoneNameController,
+                          controller: _phoneController,
                           label: "Phone",
                           validate: (String? value) {
                             if (value!.isEmpty) {
@@ -96,7 +97,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         const SizedBox(height: 15),
                         defaultFormField(
-                          controller: _priceNameController,
+                          controller: _priceController,
                           label: "Price",
                           validate: (String? value) {
                             if (value!.isEmpty) {
@@ -110,10 +111,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(height: 20),
                         defaultButton(
                             text: 'Pay',
-                            function: () {
-                              //PaymentCubit.get(context).getAuthToken();
-                              PaymentCubit.get(context)
-                                  .getOrderID(price: _priceNameController.text.toString());
+                            function: () async {
+                              if (_formKey.currentState!.validate()) {
+                                await PaymentCubit.get(context)
+                                    .getOrderID(price: _priceController.text);
+                                await PaymentCubit.get(context).getRefCode(
+                                    price: _priceController.text,
+                                    email: _emailController.text,
+                                    firstName: _firstNameController.text,
+                                    lastName: _lastNameController.text,
+                                    phone: _phoneController.text);
+                                await PaymentCubit.get(context).getTokenCard(
+                                    price: _priceController.text,
+                                    email: _emailController.text,
+                                    firstName: _firstNameController.text,
+                                    lastName: _lastNameController.text,
+                                    phone: _phoneController.text);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ToggleScreen()));
+                              }
+                              // PaymentCubit.get(context).getAuthToken();
+                              // PaymentCubit.get(context).getOrderID(price: _priceController.text.toString());
                             })
                       ],
                     ),

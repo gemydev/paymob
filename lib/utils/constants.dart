@@ -8,6 +8,6 @@ String finalTokenCard = '';
 String finalTokenKiosk = '';
 
 int integrationIdCard = 2502451;
-String integrationIdKiosk = '2504506';
+int integrationIdKiosk = 2504506;
 
 String refCode = '';

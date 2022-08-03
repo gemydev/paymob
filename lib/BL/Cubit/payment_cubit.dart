@@ -32,15 +32,15 @@ class PaymentCubit extends Cubit<PaymentState> {
 
   Future getOrderID({String? price}) async {
     await getAuthToken();
-    DioHelper.postData(
+    await DioHelper.postData(
             url: "ecommerce/orders",
             data: OrderRegistrationRequest(
               authToken: payMobFirstToken.toString(),
-              amountCents: "10000",
+              amountCents: price.toString(),
               currency: "EGP",
               deliveryNeeded: "false",
               items: [],
-              merchantOrderId: Random().nextInt(100),
+              merchantOrderId: Random().nextInt(99),
             ).toJson())
         .then((value) {
       //debugPrint(value.toString());
@@ -58,41 +58,105 @@ class PaymentCubit extends Cubit<PaymentState> {
       String? lastName,
       String? email,
       String? phone}) async {
-    await getAuthToken();
-    await getOrderID(price: price);
-
     DioHelper.postData(
-            url: "ecommerce/orders",
+            url: "acceptance/payment_keys",
             data: PaymentKeyRequest(
               authToken: payMobFirstToken.toString(),
-              amountCents: "10000",
+              amountCents: price,
               currency: "EGP",
               integrationId: integrationIdCard,
               orderId: orderID,
               expiration: 3600,
               lockOrderWhenPaid: "false",
               billingData: BillingData(
-                  apartment: "803",
-                  email: "claudette09@exa.com",
-                  floor: "42",
-                  firstName: "Clifford",
-                  street: "Ethan Land",
-                  building: "8028",
-                  phoneNumber: "+86(8)9135210487",
+                  apartment: "NA",
+                  email: email,
+                  floor: "NA",
+                  firstName: firstName,
+                  street: "NA",
+                  building: "NA",
+                  phoneNumber: phone,
                   shippingMethod: "PKG",
-                  postalCode: "01898",
-                  city: "Jaskolskiburgh",
-                  country: "CR",
-                  lastName: "Nicolas",
-                  state: "Utah"),
+                  postalCode: "NA",
+                  city: "NA",
+                  country: "NA",
+                  lastName: lastName,
+                  state: "NA"),
             ).toJson())
         .then((value) {
       //debugPrint(value.toString());
       finalTokenCard = value.data["token"].toString();
       debugPrint("FinalTokenCard = $finalTokenCard");
-      emit(PaymentOrderIDSuccess());
+      emit(PaymentTokenCardSuccess());
     }).onError((error, stackTrace) {
-      emit(PaymentOrderIDError(error.toString()));
+      emit(PaymentTokenCardError(error.toString()));
+    });
+  }
+
+  Future getTokenKiosk(
+      {String? price,
+      String? firstName,
+      String? lastName,
+      String? email,
+      String? phone}) async {
+    DioHelper.postData(
+            url: "acceptance/payment_keys",
+            data: PaymentKeyRequest(
+              authToken: payMobFirstToken.toString(),
+              amountCents: price,
+              currency: "EGP",
+              integrationId: integrationIdKiosk,
+              orderId: orderID,
+              expiration: 3600,
+              lockOrderWhenPaid: "false",
+              billingData: BillingData(
+                  apartment: "NA",
+                  email: email,
+                  floor: "NA",
+                  firstName: firstName,
+                  street: "NA",
+                  building: "NA",
+                  phoneNumber: phone,
+                  shippingMethod: "PKG",
+                  postalCode: "NA",
+                  city: "NA",
+                  country: "NA",
+                  lastName: lastName,
+                  state: "NA"),
+            ).toJson())
+        .then((value) {
+      //debugPrint(value.toString());
+      finalTokenKiosk = value.data["token"].toString();
+      debugPrint("FinalTokenKiosk = $finalTokenKiosk");
+      emit(PaymentTokenKioskSuccess());
+    }).onError((error, stackTrace) {
+      emit(PaymentTokenKioskError(error.toString()));
+    });
+  }
+
+  Future getRefCode(
+      {String? price,
+      String? firstName,
+      String? lastName,
+      String? email,
+      String? phone}) async {
+    await getTokenKiosk(
+        price: price,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone: phone);
+
+    DioHelper.postData(url: "acceptance/payments/pay", data: {
+      "source": {"identifier": "AGGREGATOR", "subtype": "AGGREGATOR"},
+      "payment_token": finalTokenKiosk
+    }).then((value) {
+      //debugPrint(value.toString());
+      refCode = value.data["id"].toString();
+      debugPrint("RefCode = $refCode");
+      emit(PaymentRefCodeSuccess());
+    }).onError((error, stackTrace) {
+      emit(PaymentRefCodeError(error.toString()));
     });
   }
 }
