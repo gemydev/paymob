@@ -108,9 +108,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           prefix: Icons.price_check,
                         ),
                         const SizedBox(height: 20),
-                        defaultButton(text: 'Pay', function: () {
-                          PaymentCubit.get(context).getAuthToken();
-                        })
+                        defaultButton(
+                            text: 'Pay',
+                            function: () {
+                              //PaymentCubit.get(context).getAuthToken();
+                              PaymentCubit.get(context)
+                                  .getOrderID(price: _priceNameController.text.toString());
+                            })
                       ],
                     ),
                   ),

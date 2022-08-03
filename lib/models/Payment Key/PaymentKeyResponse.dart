@@ -1,11 +1,11 @@
 class PaymentKeyResponse {
   PaymentKeyResponse({
-      this.token,});
+      required this.token,});
 
   PaymentKeyResponse.fromJson(dynamic json) {
     token = json['token'];
   }
-  String token;
+  String? token;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

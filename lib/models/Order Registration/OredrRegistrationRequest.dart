@@ -7,8 +7,8 @@
 /// shipping_data : {"apartment":"803","email":"claudette09@exa.com","floor":"42","first_name":"Clifford","street":"Ethan Land","building":"8028","phone_number":"+86(8)9135210487","postal_code":"01898","extra_description":"8 Ram , 128 Giga","city":"Jaskolskiburgh","country":"CR","last_name":"Nicolas","state":"Utah"}
 /// shipping_details : {"notes":" test","number_of_packages":1,"weight":1,"weight_unit":"Kilogram","length":1,"width":1,"height":1,"contents":"product of some sorts"}
 
-class OredrRegistrationRequest {
-  OredrRegistrationRequest({
+class OrderRegistrationRequest {
+  OrderRegistrationRequest({
       String? authToken, 
       String? deliveryNeeded, 
       String? amountCents, 
@@ -27,7 +27,7 @@ class OredrRegistrationRequest {
     _shippingDetails = shippingDetails;
 }
 
-  OredrRegistrationRequest.fromJson(dynamic json) {
+  OrderRegistrationRequest.fromJson(dynamic json) {
     _authToken = json['auth_token'];
     _deliveryNeeded = json['delivery_needed'];
     _amountCents = json['amount_cents'];
@@ -50,7 +50,7 @@ class OredrRegistrationRequest {
   List<Items>? _items;
   ShippingData? _shippingData;
   ShippingDetails? _shippingDetails;
-OredrRegistrationRequest copyWith({  String? authToken,
+OrderRegistrationRequest copyWith({  String? authToken,
   String? deliveryNeeded,
   String? amountCents,
   String? currency,
@@ -58,7 +58,7 @@ OredrRegistrationRequest copyWith({  String? authToken,
   List<Items>? items,
   ShippingData? shippingData,
   ShippingDetails? shippingDetails,
-}) => OredrRegistrationRequest(  authToken: authToken ?? _authToken,
+}) => OrderRegistrationRequest(  authToken: authToken ?? _authToken,
   deliveryNeeded: deliveryNeeded ?? _deliveryNeeded,
   amountCents: amountCents ?? _amountCents,
   currency: currency ?? _currency,

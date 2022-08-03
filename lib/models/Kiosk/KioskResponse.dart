@@ -121,7 +121,7 @@ class KioskResponse {
     if (json['transaction_processed_callback_responses'] != null) {
       _transactionProcessedCallbackResponses = [];
       json['transaction_processed_callback_responses'].forEach((v) {
-        _transactionProcessedCallbackResponses?.add(Dynamic.fromJson(v));
+        _transactionProcessedCallbackResponses?.add(KioskResponse.fromJson(v));
       });
     }
     _currency = json['currency'];

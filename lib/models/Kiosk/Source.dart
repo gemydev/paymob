@@ -1,14 +1,14 @@
 class Source {
   Source({
-      this.identifier, 
-      this.subtype,});
+      required this.identifier,
+      required this.subtype,});
 
   Source.fromJson(dynamic json) {
     identifier = json['identifier'];
     subtype = json['subtype'];
   }
-  String identifier;
-  String subtype;
+  String? identifier;
+  String? subtype;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
